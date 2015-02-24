@@ -8,6 +8,8 @@ private:
 	bool			exitGame;
 	SDL_Window		*window;
 	SDL_Renderer	*renderer;
+	
+	Ball			ball;
 public:
 					Game();
 					~Game();

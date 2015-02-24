@@ -43,11 +43,16 @@ bool Game::Init()
 		return false;
 	}
 
+	// initialize ball
+	ball.Init(renderer);
+
 	return success;
 }
 
 void Game::Run()
 {
+	
+
 	exitGame = false;
 	SDL_Event e;
 	//Main game loop
@@ -58,11 +63,19 @@ void Game::Run()
 		{
 			ProcessEvents(e);
 		}
+		//handle user input
+		ProcessInput();
+
+		// update game objects
+		Update();
+
+		// draw stuff to the screen
+		Render();
 		
 		
 	}
 	std::cout << "Exit condition reached" << std::endl;
-	SDL_Delay(2000);
+	SDL_Delay(1000);
 	CleanupResources();
 	SDL_Quit();
 }
@@ -99,12 +112,17 @@ void Game::ProcessInput()
 
 void Game::Render()
 {
+	SDL_RenderClear(renderer);
 
+	// call all render methods
+	ball.Render();
+
+	SDL_RenderPresent(renderer);
 }
 
 void Game::Update()
 {
-
+	ball.Update();
 }
 
 void Game::CleanupResources()
