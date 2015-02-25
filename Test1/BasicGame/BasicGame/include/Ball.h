@@ -22,10 +22,15 @@ private:
 	std::default_random_engine generator;
 	std::uniform_int_distribution<int> dist;
 
+	SDL_Rect		collider;
+
 
 public:
 	void			Init(SDL_Renderer *ren);
 	void			Render();
 	void			Update();
+
+	void			OnCollision();
+	SDL_Rect		GetColliderBounds() { return collider; }
 };
 #endif

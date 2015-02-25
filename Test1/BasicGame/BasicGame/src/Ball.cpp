@@ -25,6 +25,9 @@ void Ball::Init(SDL_Renderer *ren)
 	velocity.x = dist(generator);
 	velocity.y = dist(generator);
 
+	//set collider size
+	collider.w = 32;
+	collider.h = 32;
 
 }
 
@@ -52,7 +55,7 @@ void Ball::Update()
 
 	// if position meets the bounds of the screen, reverse velocity
 	// this will be handled by collision checking in the future
-	if (position.x >= (800 - 64))
+	if (position.x >= (800 - 32))
 	{
 		velocity.x *= -1;
 	}
@@ -60,7 +63,7 @@ void Ball::Update()
 	{
 		velocity.x *= -1;
 	}
-	if (position.y >= (600 - 64))
+	if (position.y >= (600 - 32))
 	{
 		velocity.y *= -1;
 	}
@@ -68,4 +71,15 @@ void Ball::Update()
 	{
 		velocity.y *= -1;
 	}
+
+	collider.x = position.x;
+	collider.y = position.y;
+}
+
+void Ball::OnCollision()
+{
+	// callback fires on collision with another object
+	//std::cout << "Collision detected" << std::endl;
+
+	velocity.y *= -1;
 }

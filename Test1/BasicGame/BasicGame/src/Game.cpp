@@ -46,6 +46,9 @@ bool Game::Init()
 	// initialize ball
 	ball.Init(renderer);
 
+	// initialize paddle
+	paddle.Init(renderer);
+
 	return success;
 }
 
@@ -63,6 +66,9 @@ void Game::Run()
 		{
 			ProcessEvents(e);
 		}
+		
+		
+
 		//handle user input
 		ProcessInput();
 
@@ -72,7 +78,8 @@ void Game::Run()
 		// draw stuff to the screen
 		Render();
 		
-		
+		//check collisions
+		CheckCollisions();
 	}
 	std::cout << "Exit condition reached" << std::endl;
 	SDL_Delay(1000);
@@ -93,8 +100,7 @@ void Game::ProcessEvents(const SDL_Event &e)
 			break;
 
 		default:
-			std::cout << "Key press detected" << std::endl;
-			exitGame = true;
+			
 			break;
 		}
 
@@ -108,6 +114,7 @@ void Game::ProcessEvents(const SDL_Event &e)
 void Game::ProcessInput()
 {
 	//Process user input
+	paddle.GetInput();
 }
 
 void Game::Render()
@@ -116,6 +123,7 @@ void Game::Render()
 
 	// call all render methods
 	ball.Render();
+	paddle.Render();
 
 	SDL_RenderPresent(renderer);
 }
@@ -123,6 +131,61 @@ void Game::Render()
 void Game::Update()
 {
 	ball.Update();
+	paddle.Update();
+}
+
+void Game::CheckCollisions()
+{
+	//run collision checks
+	if (AABB(ball.GetColliderBounds(), paddle.GetColliderBounds()))
+	{
+		ball.OnCollision();
+	}
+}
+
+bool Game::AABB(SDL_Rect ball, SDL_Rect other)
+{
+	//The sides of the rectangles
+	int leftA, leftB;
+	int rightA, rightB;
+	int topA, topB;
+	int bottomA, bottomB;
+
+	//calculate the sides of rect A
+	leftA = ball.x;
+	rightA = ball.x + ball.w;
+	topA = ball.y;
+	bottomA = ball.y + ball.h;
+
+	//caluculate the sides of rect B
+	leftB = other.x;
+	rightB = other.x + other.w;
+	topB = other.y;
+	bottomB = other.y + other.h;
+
+	//check sides for collision
+	if (bottomA <= topB)
+	{
+		return false;
+	}
+
+	if (topA >= bottomB)
+	{
+		return false;
+	}
+
+	if (rightA <= leftB)
+	{
+		return false;
+	}
+
+	if (leftA >= rightB)
+	{
+		return false;
+	}
+
+	// if none of the sides from A are outside of B
+	return true;
 }
 
 void Game::CleanupResources()

@@ -75,11 +75,13 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\Ball.cpp" />
     <ClCompile Include="src\Game.cpp" />
+    <ClCompile Include="src\Paddle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Ball.h" />
     <ClInclude Include="include\Cleanup.h" />
     <ClInclude Include="include\Game.h" />
+    <ClInclude Include="include\Paddle.h" />
     <ClInclude Include="include\Vector2.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
