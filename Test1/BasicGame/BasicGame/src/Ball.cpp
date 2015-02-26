@@ -20,7 +20,7 @@ void Ball::Init(SDL_Renderer *ren)
 	position.x = 400;
 	position.y = 300;
 	
-	dist = std::uniform_int_distribution<int>(1, 5);
+	dist = std::uniform_int_distribution<int>(3, 5);
 	
 	velocity.x = dist(generator);
 	velocity.y = dist(generator);
@@ -84,4 +84,5 @@ void Ball::OnCollision()
 	//std::cout << "Collision detected" << std::endl;
 
 	velocity.y *= -1;
+	
 }
