@@ -25,6 +25,8 @@ void Paddle::Init(SDL_Renderer *renderer)
 	velocity.y = 0;
 
 	// set collider box size
+	collider.x = position.x;
+	collider.y = position.y;
 	collider.w = 128;
 	collider.h = 32;
 }

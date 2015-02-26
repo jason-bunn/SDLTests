@@ -26,6 +26,8 @@ void Ball::Init(SDL_Renderer *ren)
 	velocity.y = dist(generator);
 
 	//set collider size
+	collider.x = position.x;
+	collider.y = position.y;
 	collider.w = 32;
 	collider.h = 32;
 

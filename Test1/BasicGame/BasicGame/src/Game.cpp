@@ -1,6 +1,7 @@
 
 #include <iostream>
 #include <string>
+#include <SDL_image.h>
 #include "Game.h"
 #include "Cleanup.h"
 
@@ -49,6 +50,28 @@ bool Game::Init()
 	// initialize paddle
 	paddle.Init(renderer);
 
+	// intialize bricks
+	// load shared texture
+	brickTex = IMG_LoadTexture(renderer, "assets/brick.png");
+	if (brickTex == nullptr)
+	{
+		std::cout << "Could not load brick texture" << std::endl;
+	}
+	else
+	{
+		for (int row = 0; row < 3; row++)
+		{
+			for (int col = 0; col < 11; col++)
+			{
+				Vector2 temp;
+				temp.x = 48 + (col * 64);
+				temp.y = 48 + (row * 32);
+				bricks[row][col] = Brick();
+				bricks[row][col].Init(renderer, temp, brickTex);
+			}
+		}
+	}
+
 	return success;
 }
 
@@ -66,7 +89,8 @@ void Game::Run()
 		{
 			ProcessEvents(e);
 		}
-		
+		//check collisions
+		CheckCollisions();
 		
 
 		//handle user input
@@ -78,8 +102,7 @@ void Game::Run()
 		// draw stuff to the screen
 		Render();
 		
-		//check collisions
-		CheckCollisions();
+		
 	}
 	std::cout << "Exit condition reached" << std::endl;
 	SDL_Delay(1000);
@@ -124,6 +147,14 @@ void Game::Render()
 	// call all render methods
 	ball.Render();
 	paddle.Render();
+	for (int row = 0; row < 3; row++)
+	{
+		for (int col = 0; col < 11; col++)
+		{
+			
+			bricks[row][col].Render();
+		}
+	}
 
 	SDL_RenderPresent(renderer);
 }
@@ -140,6 +171,21 @@ void Game::CheckCollisions()
 	if (AABB(ball.GetColliderBounds(), paddle.GetColliderBounds()))
 	{
 		ball.OnCollision();
+	}
+	for (int row = 0; row < 3; row++)
+	{
+		for (int col = 0; col < 11; col++)
+		{
+			if (AABB(ball.GetColliderBounds(), bricks[row][col].GetColliderBounds()))
+			{
+				if (bricks[row][col].IsAlive())
+				{
+					ball.OnCollision();
+					bricks[row][col].OnCollision();
+				}
+				
+			}
+		}
 	}
 }
 
