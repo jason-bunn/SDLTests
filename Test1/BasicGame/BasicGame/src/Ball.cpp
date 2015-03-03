@@ -20,7 +20,7 @@ void Ball::Init(SDL_Renderer *ren)
 	position.x = 400;
 	position.y = 300;
 	
-	dist = std::uniform_int_distribution<int>(3, 5);
+	dist = std::uniform_int_distribution<int>(4, 7);
 	
 	velocity.x = dist(generator);
 	velocity.y = dist(generator);
@@ -78,11 +78,18 @@ void Ball::Update()
 	collider.y = position.y;
 }
 
-void Ball::OnCollision()
+void Ball::OnCollision(int colFlags)
 {
 	// callback fires on collision with another object
 	//std::cout << "Collision detected" << std::endl;
-
-	velocity.y *= -1;
+	std::cout << colFlags << std::endl;
+	if (colFlags % 2 != 0 || colFlags % 4 != 0)
+	{
+		velocity.y *= -1;
+	}
+	else if (colFlags % 8 != 0 || colFlags % 16 != 0)
+	{
+		velocity.x *= -1;
+	}
 	
 }

@@ -167,20 +167,29 @@ void Game::Update()
 
 void Game::CheckCollisions()
 {
+	int colFlags = 0;
+	
 	//run collision checks
+	
 	if (AABB(ball.GetColliderBounds(), paddle.GetColliderBounds()))
 	{
-		ball.OnCollision();
+		CheckColFlags(colFlags, ball.GetColliderBounds(), paddle.GetColliderBounds());
+		//std::cout << colFlags << std::endl;
+		ball.OnCollision(colFlags);
 	}
+	
 	for (int row = 0; row < 3; row++)
 	{
 		for (int col = 0; col < 11; col++)
 		{
+			colFlags = 0;
+			//colFlags = AABB(ball.GetColliderBounds(), bricks[row][col].GetColliderBounds());
 			if (AABB(ball.GetColliderBounds(), bricks[row][col].GetColliderBounds()))
 			{
 				if (bricks[row][col].IsAlive())
 				{
-					ball.OnCollision();
+					CheckColFlags(colFlags, ball.GetColliderBounds(), bricks[row][col].GetColliderBounds());
+					ball.OnCollision(colFlags);
 					bricks[row][col].OnCollision();
 				}
 				
@@ -191,47 +200,79 @@ void Game::CheckCollisions()
 
 bool Game::AABB(SDL_Rect ball, SDL_Rect other)
 {
+	// bottom = 2
+	// top = 4
+	// left = 8
+	// right = 16
+
+
+	
 	//The sides of the rectangles
 	int leftA, leftB;
 	int rightA, rightB;
 	int topA, topB;
 	int bottomA, bottomB;
-
+	int widthA, widthB;
 	//calculate the sides of rect A
 	leftA = ball.x;
 	rightA = ball.x + ball.w;
 	topA = ball.y;
 	bottomA = ball.y + ball.h;
+	widthA = rightA - leftA;
 
 	//caluculate the sides of rect B
 	leftB = other.x;
 	rightB = other.x + other.w;
 	topB = other.y;
 	bottomB = other.y + other.h;
-
+	widthB = rightB - leftB;
 	//check sides for collision
+	
+	//check bottom of ball to top of other
 	if (bottomA <= topB)
 	{
 		return false;
+		
 	}
-
+	
 	if (topA >= bottomB)
 	{
 		return false;
 	}
-
-	if (rightA <= leftB)
+	
+	if (rightA  <= leftB)
 	{
 		return false;
 	}
-
+	
 	if (leftA >= rightB)
 	{
 		return false;
 	}
 
 	// if none of the sides from A are outside of B
+	
 	return true;
+}
+
+void Game::CheckColFlags(int& colflags, SDL_Rect ball, SDL_Rect other)
+{
+	Vector2 ballCenter, otherCenter;
+	ballCenter.y = ball.y + (ball.h / 2);
+	ballCenter.x = ball.x + (ball.w / 2);
+
+	otherCenter.y = other.y + (other.h / 2);
+	otherCenter.x = other.x + (other.w / 2);
+
+	// if the center of the ball is in the width of other
+	if (ballCenter.y > other.y && ballCenter.y < (other.y + other.h))
+	{
+		colflags += 8;
+	}
+	else
+	{
+		colflags += 2;
+	}
 }
 
 void Game::CleanupResources()

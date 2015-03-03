@@ -25,6 +25,7 @@ public:
 	void			Run();
 	void			Update();
 	void			CheckCollisions();
+	void			CheckColFlags(int&, SDL_Rect, SDL_Rect);
 	bool			AABB(SDL_Rect ball, SDL_Rect other);
 	void			Render();
 	void			ProcessEvents(const SDL_Event &e);

@@ -30,7 +30,7 @@ public:
 	void			Render();
 	void			Update();
 
-	void			OnCollision();
+	void			OnCollision(int colFlags);
 	SDL_Rect		GetColliderBounds() { return collider; }
 };
 #endif
