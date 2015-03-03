@@ -13,7 +13,7 @@ int main(int, char**)
 		std::cout << "Failed to initialize game" << std::endl;
 		return -1;
 	}
-	else
+	else // run the game
 	{
 		game.Run();
 	}
