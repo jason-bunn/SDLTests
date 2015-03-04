@@ -1,11 +1,14 @@
 
 #include <iostream>
-#include <string>
+#include <sstream>
 #include <SDL_image.h>
+#include <SDL_ttf.h>
+
+
 #include "Game.h"
 #include "Cleanup.h"
 
-
+TTF_Font *gFont;
 
 Game::Game()
 {
@@ -26,7 +29,7 @@ bool Game::Init()
 		LogSDLError(std::cout, "SDL_Init");
 		return false;
 	}
-	
+
 	window = SDL_CreateWindow("Basic Game tests", 100, 100, 800, 600, SDL_WINDOW_SHOWN);
 	if (window == nullptr)
 	{
@@ -72,15 +75,27 @@ bool Game::Init()
 		}
 	}
 
+	if (TTF_Init() == -1)
+	{
+		LogSDLError(std::cout, "Error loading TTF");
+	}
+	// open TTF
+	OpenFont();
+
 	return success;
 }
 
 void Game::Run()
 {
+	Uint32 currentTime;
 	
+	int fps = 0;
 
 	exitGame = false;
 	SDL_Event e;
+
+	currentTime = SDL_GetTicks();
+
 	//Main game loop
 	while (!exitGame)
 	{
@@ -89,6 +104,9 @@ void Game::Run()
 		{
 			ProcessEvents(e);
 		}
+
+		
+
 		//check collisions
 		CheckCollisions();
 		
@@ -100,13 +118,17 @@ void Game::Run()
 		Update();
 
 		// draw stuff to the screen
-		Render();
+		Render(currentTime, fps);
+
+		fps++;
+		
 		
 		
 	}
 	std::cout << "Exit condition reached" << std::endl;
 	SDL_Delay(1000);
 	CleanupResources();
+	TTF_Quit();
 	SDL_Quit();
 }
 
@@ -140,8 +162,9 @@ void Game::ProcessInput()
 	paddle.GetInput();
 }
 
-void Game::Render()
+void Game::Render(Uint32 currentTime, int fps)
 {
+	SDL_Color textColor = { 255, 255, 255, 255 };
 	SDL_RenderClear(renderer);
 
 	// call all render methods
@@ -155,6 +178,8 @@ void Game::Render()
 			bricks[row][col].Render();
 		}
 	}
+
+	RenderFramesPerSecond(currentTime, fps);
 
 	SDL_RenderPresent(renderer);
 }
@@ -284,3 +309,56 @@ void Game::LogSDLError(std::ostream &os, const std::string &msg)
 {
 	os << msg << " error: " << SDL_GetError() << std::endl;
 }
+
+void Game::OpenFont()
+{
+	gFont = TTF_OpenFont("assets/data-latin.ttf", 18);
+	if (gFont == nullptr)
+	{
+		LogSDLError(std::cout, "Open Font Failed");
+	}
+}
+
+void Game::RenderText(const std::string &msg, SDL_Color color)
+{
+	SDL_Surface *surf = TTF_RenderText_Solid(gFont, msg.c_str(), color);
+	if (surf == nullptr)
+	{
+		TTF_CloseFont(gFont);
+		LogSDLError(std::cout, "TTF_RenderText");
+		
+	}
+
+	debugText = SDL_CreateTextureFromSurface(renderer, surf);
+	if (debugText == nullptr)
+	{
+		LogSDLError(std::cout, "Create font Texture");
+	}
+
+	SDL_FreeSurface(surf);
+
+}
+
+void Game::RenderFramesPerSecond(Uint32 startTime, int fps)
+{
+	float totalFps = (fps / (float)(SDL_GetTicks() - startTime)) * 1000;
+
+	std::stringstream ss;
+	
+	ss << totalFps;
+
+	
+
+	std::string fpsText = "FPS: ";
+	fpsText.append(ss.str());
+	SDL_Color textColor = { 255, 255, 255, 255 };
+	// render debug text (fps)
+	RenderText(fpsText, textColor);
+	SDL_Rect debugRect;
+
+	debugRect.x = 600;
+	debugRect.y = 25;
+	SDL_QueryTexture(debugText, NULL, NULL, &debugRect.w, &debugRect.h);
+	SDL_RenderCopy(renderer, debugText, NULL, &debugRect);
+}
+

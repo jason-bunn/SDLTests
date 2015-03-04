@@ -82,7 +82,7 @@ void Ball::OnCollision(int colFlags)
 {
 	// callback fires on collision with another object
 	//std::cout << "Collision detected" << std::endl;
-	std::cout << colFlags << std::endl;
+	//std::cout << colFlags << std::endl;
 	if (colFlags % 2 != 0 || colFlags % 4 != 0)
 	{
 		velocity.y *= -1;
