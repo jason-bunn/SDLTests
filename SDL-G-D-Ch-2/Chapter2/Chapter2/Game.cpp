@@ -1,4 +1,7 @@
 #include "Game.h"
+#include "TextureManager.h"
+
+typedef TextureManager TheTextureManager;
 
 Game::Game()
 {
@@ -47,23 +50,10 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, in
 
 	std::cout << "Everything init OK" << std::endl;
 
-	SDL_Surface* pTempSurface = IMG_Load("assets/animate-alpha.png");
-
-	if (pTempSurface == 0)
+	if (!TheTextureManager::Instance()->load("assets/animate-alpha.png", "animate", m_pRenderer))
 	{
-		std::cout << "Failed to load PNG" << std::endl;
+		return false;
 	}
-
-	m_pTexture = SDL_CreateTextureFromSurface(m_pRenderer, pTempSurface);
-
-	SDL_FreeSurface(pTempSurface);
-	m_sourceRectangle.w = 128;
-	m_sourceRectangle.h = 82;
-
-	m_destRectangle.x = m_sourceRectangle.x = 0;
-	m_destRectangle.y = m_sourceRectangle.y = 0;
-	m_destRectangle.w = m_sourceRectangle.w;
-	m_destRectangle.h = m_sourceRectangle.h;
 
 	m_bRunning = true;
 
@@ -75,8 +65,9 @@ void Game::render()
 	SDL_RenderClear(m_pRenderer);
 
 	//render stuff here
-	SDL_RenderCopyEx(m_pRenderer, m_pTexture, &m_sourceRectangle, &m_destRectangle,
-		0,0, SDL_FLIP_HORIZONTAL);
+	TheTextureManager::Instance()->draw("animate", 0, 0, 128, 82, m_pRenderer);
+	
+	TheTextureManager::Instance()->drawFrame("animate", 100, 100, 128, 82, 1, m_currentFrame, m_pRenderer);
 
 	SDL_RenderPresent(m_pRenderer);
 }
@@ -100,7 +91,7 @@ void Game::handleEvents()
 void Game::update()
 {
 	//update all the things!
-	m_sourceRectangle.x = 128 * int(((SDL_GetTicks() / 100) % 6));
+	m_currentFrame = int(((SDL_GetTicks() / 100) % 6));
 }
 
 void Game::clean()

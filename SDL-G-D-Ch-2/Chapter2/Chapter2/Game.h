@@ -5,6 +5,7 @@
 #include <SDL_image.h>
 #include "SDL.h"
 
+
 class Game
 {
 public:
@@ -25,9 +26,8 @@ private:
 	SDL_Window* m_pWindow;
 	SDL_Renderer* m_pRenderer;
 
-	SDL_Texture* m_pTexture;
-	SDL_Rect m_sourceRectangle;
-	SDL_Rect m_destRectangle;
+	int m_currentFrame;
+	
 
 	bool m_bRunning;
 
