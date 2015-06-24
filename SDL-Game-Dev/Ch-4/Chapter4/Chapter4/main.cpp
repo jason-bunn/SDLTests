@@ -41,7 +41,7 @@ int main(int, char**)
 		return -1;
 	}
 	std::cout << "Game closing" << std::endl;
-	TheGame::Instance()->clean();
-	TheGame::Instance()->quit();
+	
+	
 	return 0;
 }

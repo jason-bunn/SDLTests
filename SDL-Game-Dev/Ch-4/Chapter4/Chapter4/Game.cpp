@@ -108,5 +108,7 @@ void Game::clean()
 
 void Game::quit()
 {
+	clean();
 	SDL_Quit();
+	m_bRunning = false;
 }
