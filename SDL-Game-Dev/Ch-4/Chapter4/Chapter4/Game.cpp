@@ -1,7 +1,7 @@
 #include "Game.h"
 #include "TextureManager.h"
+#include "InputHandler.h"
 
-typedef TextureManager TheTextureManager;
 
 Game* Game::s_pInstance = 0;
 
@@ -50,6 +50,8 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, in
 		return false;
 	}
 
+	TheInputHandler::Instance()->initializeJoysticks();
+
 	std::cout << "Everything init OK" << std::endl;
 
 	if (!TheTextureManager::Instance()->load("assets/animate-alpha.png", "animate", m_pRenderer))
@@ -83,18 +85,7 @@ void Game::render()
 
 void Game::handleEvents()
 {
-	SDL_Event event;
-	if (SDL_PollEvent(&event))
-	{
-		switch (event.type)
-		{
-		case SDL_QUIT:
-			m_bRunning = false;
-			break;
-		default:
-			break;
-		}
-	}
+	TheInputHandler::Instance()->update();
 }
 
 void Game::update()
@@ -109,8 +100,13 @@ void Game::update()
 void Game::clean()
 {
 	std::cout << "Cleaning up your mess" << std::endl;
+	TheInputHandler::Instance()->clean();
 	SDL_DestroyRenderer(m_pRenderer);
 	SDL_DestroyWindow(m_pWindow);
-	SDL_Quit();
+	
 }
 
+void Game::quit()
+{
+	SDL_Quit();
+}

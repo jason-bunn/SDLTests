@@ -20,7 +20,7 @@ public:
 	void render();
 	void handleEvents();
 	void update();
-
+	void quit();
 	void clean();
 
 	bool isRunning() { return m_bRunning; }
@@ -54,5 +54,5 @@ private:
 
 	std::vector<SDLGameObject*> m_gameObjects;
 };
-
+typedef Game TheGame;
 #endif
