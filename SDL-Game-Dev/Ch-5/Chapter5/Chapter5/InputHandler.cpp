@@ -301,3 +301,11 @@ int InputHandler::yvalue(int joy, int stick)
 	}
 	return 0;
 }
+
+void InputHandler::reset()
+{
+	for (int i = 0; i < 3; i++)
+	{
+		m_mouseButtonStates.push_back(false);
+	}
+}

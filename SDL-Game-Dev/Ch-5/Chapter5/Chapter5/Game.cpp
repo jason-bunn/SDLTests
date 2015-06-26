@@ -1,7 +1,8 @@
 #include "Game.h"
 #include "TextureManager.h"
 #include "InputHandler.h"
-
+#include "MenuState.h"
+#include "PlayState.h"
 
 Game* Game::s_pInstance = 0;
 
@@ -30,7 +31,7 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, in
 			if (m_pRenderer != 0)
 			{
 				std::cout << "Renderer creation success" << std::endl;
-				SDL_SetRenderDrawColor(m_pRenderer, 255, 0, 0, 255);
+				SDL_SetRenderDrawColor(m_pRenderer, 0, 0, 0, 255);
 			}
 			else
 			{ 
@@ -54,14 +55,17 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, in
 
 	std::cout << "Everything init OK" << std::endl;
 
-	if (!TheTextureManager::Instance()->load("assets/animate-alpha.png", "animate", m_pRenderer))
-	{
-		return false;
-	}
+	//if (!TheTextureManager::Instance()->load("assets/animate-alpha.png", "animate", m_pRenderer))
+	//{
+	//	return false;
+	//}
 
+	//initialize game state machine and push the menu state
+	m_pGameStateMachine = new GameStateMachine();
+	m_pGameStateMachine->changeState(new MenuState());
 
-	m_gameObjects.push_back(new Player(new LoaderParams(100, 100, 128, 82, "animate")));
-	m_gameObjects.push_back(new Enemy(new LoaderParams(300,300,128,82,"animate")));
+	//m_gameObjects.push_back(new Player(new LoaderParams(100, 100, 128, 82, "animate")));
+	//m_gameObjects.push_back(new Enemy(new LoaderParams(300,300,128,82,"animate")));
 	
 
 	m_bRunning = true;
@@ -75,10 +79,7 @@ void Game::render()
 
 	//render stuff here
 	
-	for (std::vector<GameObject*>::size_type i = 0; i != m_gameObjects.size(); i++)
-	{
-		m_gameObjects[i]->draw();
-	}
+	m_pGameStateMachine->render();
 
 	SDL_RenderPresent(m_pRenderer);
 }
@@ -86,15 +87,17 @@ void Game::render()
 void Game::handleEvents()
 {
 	TheInputHandler::Instance()->update();
+
+	/*if (TheInputHandler::Instance()->isKeyDown(SDL_SCANCODE_RETURN))
+	{
+		m_pGameStateMachine->changeState(new PlayState());
+	}*/
 }
 
 void Game::update()
 {
 	//update all the things!
-	for (std::vector<GameObject*>::size_type i = 0; i != m_gameObjects.size(); i++)
-	{
-		m_gameObjects[i]->update();
-	}
+	m_pGameStateMachine->update();
 }
 
 void Game::clean()

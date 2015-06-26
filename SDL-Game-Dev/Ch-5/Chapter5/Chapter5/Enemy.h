@@ -12,6 +12,10 @@ public:
 	void draw(SDL_Renderer* pRenderer);
 	void update();
 	void clean();
+
+private:
+
+	int m_numFrames;
 };
 
 

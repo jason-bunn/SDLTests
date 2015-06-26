@@ -8,6 +8,7 @@
 #include "GameObject.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "GameStateMachine.h"
 
 class Game
 {
@@ -38,6 +39,8 @@ public:
 
 	SDL_Renderer* getRenderer() const { return m_pRenderer; }
 
+	GameStateMachine* getStateMachine() { return m_pGameStateMachine; }
+
 private:
 
 	Game();
@@ -51,6 +54,7 @@ private:
 
 	bool m_bRunning;
 
+	GameStateMachine* m_pGameStateMachine;
 
 	std::vector<SDLGameObject*> m_gameObjects;
 };
