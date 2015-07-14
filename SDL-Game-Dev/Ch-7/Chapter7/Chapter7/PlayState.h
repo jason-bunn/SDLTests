@@ -3,6 +3,7 @@
 
 #include "GameState.h"
 #include "SDLGameObject.h"
+#include "Level.h"
 #include <vector>
 
 //forward declaration
@@ -21,6 +22,8 @@ public:
 	virtual std::string getStateID() const { return s_playID; }
 
 	bool checkCollision(SDLGameObject* p1, SDLGameObject* p2);
+
+	Level* pLevel;
 
 private:
 

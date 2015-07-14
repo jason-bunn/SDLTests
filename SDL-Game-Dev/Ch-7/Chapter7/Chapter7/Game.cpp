@@ -34,7 +34,7 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, in
 			if (m_pRenderer != 0)
 			{
 				std::cout << "Renderer creation success" << std::endl;
-				SDL_SetRenderDrawColor(m_pRenderer, 0, 0, 0, 255);
+				SDL_SetRenderDrawColor(m_pRenderer, 0, 0, 255, 255);
 			}
 			else
 			{ 
@@ -57,7 +57,8 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, in
 	TheInputHandler::Instance()->initializeJoysticks();
 
 	std::cout << "Everything init OK" << std::endl;
-
+	m_gameWidth = width;
+	m_gameHeight = height;
 
 	//register object types
 	GOFactory::Instance()->registerType("MenuButton", new MenuButtonCreator());

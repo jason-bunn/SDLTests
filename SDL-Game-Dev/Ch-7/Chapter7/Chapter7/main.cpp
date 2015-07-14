@@ -14,7 +14,7 @@ int main(int, char**)
 	Uint32 frameStart, frameTime;
 
 	std::cout << "game init attemp..." << std::endl;
-	if (TheGame::Instance()->init("Chapter 3", 100, 100, 800, 600, g_flags))
+	if (TheGame::Instance()->init("Chapter 3", 100, 100, 640, 480, g_flags))
 	{
 		std::cout << "Game init success" << std::endl;
 		//main loop

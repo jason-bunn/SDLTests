@@ -50,7 +50,11 @@ void GameStateMachine::update()
 {
 	if (!m_gameStates.empty())
 	{
-		m_gameStates.back()->update();
+		if (m_gameStates.back() != 0)
+		{
+			m_gameStates.back()->update();
+		}
+		
 	}
 }
 

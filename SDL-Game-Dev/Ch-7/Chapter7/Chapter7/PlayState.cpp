@@ -7,13 +7,14 @@
 #include "PauseState.h"
 #include "GameOverState.h"
 #include "StateParser.h"
+#include "LevelParser.h"
 #include <iostream>
 
 const std::string PlayState::s_playID = "PLAY";
 
 void PlayState::update()
 {
-	if (TheInputHandler::Instance()->isKeyDown(SDL_SCANCODE_ESCAPE))
+	/*if (TheInputHandler::Instance()->isKeyDown(SDL_SCANCODE_ESCAPE))
 	{
 		TheGame::Instance()->getStateMachine()->pushState(new PauseState());
 	}
@@ -30,28 +31,38 @@ void PlayState::update()
 	if (checkCollision(dynamic_cast<SDLGameObject*>(m_gameObjects[0]), dynamic_cast<SDLGameObject*>(m_gameObjects[1])))
 	{
 		TheGame::Instance()->getStateMachine()->pushState(new GameOverState());
-	}
+	}*/
+
+	pLevel->update();
 }
 
 void PlayState::render()
 {
-	for (int i = 0; i < m_gameObjects.size(); i++)
+	/*for (int i = 0; i < m_gameObjects.size(); i++)
 	{
 		if (m_gameObjects[i] != 0)
 		{
 			m_gameObjects[i]->draw();
 		}
-	}
+	}*/
+
+	pLevel->render();
 }
 
 bool PlayState::onEnter()
 {
 	std::cout << "loading play state" << std::endl;
 	//parse the state
-	StateParser stateParser;
-	stateParser.parseState("test.xml", s_playID, &m_gameObjects, &m_textureIDList);
+	//StateParser stateParser;
+	//stateParser.parseState("test.xml", s_playID, &m_gameObjects, &m_textureIDList);
 	
-
+	//parse the level
+	LevelParser levelParser;
+	pLevel = levelParser.parseLevel("assets/map1.tmx");
+	if (pLevel == 0)
+	{
+		std::cout << "ERROR - Level pointer is null" << std::endl;
+	}
 	std::cout << "entering PlaySate" << std::endl;
 	return true;
 }
