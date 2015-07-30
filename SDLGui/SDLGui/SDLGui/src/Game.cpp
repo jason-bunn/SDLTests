@@ -1,5 +1,6 @@
 #include "Game.h"
 #include "SDL_timer.h"
+#include "FontManager.h"
 
 #include <iostream>
 
@@ -125,7 +126,7 @@ void Game::render()
 
 
 	//display game stats
-	//displayGameStats();
+	displayGameStats();
 	//display to renderer
 	SDL_RenderPresent(m_pRenderer);
 }
@@ -154,7 +155,7 @@ void Game::clean()
 	std::cout << "Cleaning and exiting" << std::endl;
 	
 	//close all fonts
-	TTF_CloseFont(m_FontMap["StatFont"]);
+	FNTManager::Instance()->closeFonts();
 
 	SDL_DestroyRenderer(m_pRenderer);
 	SDL_DestroyWindow(m_pWindow);
@@ -165,40 +166,15 @@ void Game::displayGameStats()
 {
 	int fps = (m_FrameCount / (float)(SDL_GetTicks() - m_StartTime)) * 1000;
 	
-	std::string fpsMsg = "FPS: " + std::to_string(fps);
-	
-
-	SDL_Color color = { 255, 255, 255 };
 	if (m_bDisplayStats)
 	{
-		SDL_Surface *surf = TTF_RenderText_Blended(m_FontMap["StatFont"], fpsMsg.c_str(), color);
-		SDL_Texture *texture = SDL_CreateTextureFromSurface(m_pRenderer, surf);
-
-		
-		int iW, iH;
-		SDL_QueryTexture(texture, NULL, NULL, &iW, &iH);
-		int x = m_Width  - (iW * 2);
-		int y = 20 + (iH / 2);
-		SDL_Rect destRect;
-
-		destRect.x = x;
-		destRect.y = y;
-		destRect.w = iW;
-		destRect.h = iH;
-
-		SDL_RenderCopy(m_pRenderer, texture, NULL, &destRect);
+		FNTManager::Instance()->drawText("anon", 600, 100, "FPS: ");
+		FNTManager::Instance()->drawText("anon", 700, 100, std::to_string(fps));
 
 	}
 }
 
 void Game::loadFonts()
 {
-	TTF_Font *statFont = TTF_OpenFont("assets/fonts/orbitron-light.otf", 14);
-	if (statFont == 0)
-	{
-		std::cout << "Failed to load font" << std::endl;
-		return;
-	}
-
-	m_FontMap.emplace("StatFont", statFont);
+	FNTManager::Instance()->loadFont("AnonymousPro.ttf", "anon", 14);
 }

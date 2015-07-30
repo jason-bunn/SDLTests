@@ -2,12 +2,15 @@
 #include <exception>
 #include "Application.h"
 
+const int SCREEN_WIDTH = 800;
+const int SCREEN_HEIGHT = 600;
+
 int main(int, char**)
 {
 	Application app;
 
 	app.setApplicationName("SDL Gui Tests");
-	app.setAppDimensions(800, 600);
+	app.setAppDimensions(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	try 
 	{
