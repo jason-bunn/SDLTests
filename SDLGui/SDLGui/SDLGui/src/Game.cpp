@@ -1,10 +1,12 @@
 #include "Game.h"
 #include "SDL_timer.h"
 #include "FontManager.h"
-
+#include "GuiBox.h"
 #include <iostream>
 
 Game* Game::s_pInstance = 0;
+
+GuiBox* badBox;
 
 Game::Game() :
 m_pWindow(0),
@@ -80,7 +82,7 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 
 	//register sounds and objects
 	loadFonts();
-
+	badBox = new GuiBox(10, 10, 200, 200, { 255, 255,255 });
 
 	m_bRunning = true;
 	return true;
@@ -124,7 +126,7 @@ void Game::render()
 	
 	//render all the things
 
-
+	badBox->draw();
 	//display game stats
 	displayGameStats();
 	//display to renderer
@@ -155,7 +157,7 @@ void Game::clean()
 	std::cout << "Cleaning and exiting" << std::endl;
 	
 	//close all fonts
-	FNTManager::Instance()->closeFonts();
+	FNTManager::Instance()->clean();
 
 	SDL_DestroyRenderer(m_pRenderer);
 	SDL_DestroyWindow(m_pWindow);

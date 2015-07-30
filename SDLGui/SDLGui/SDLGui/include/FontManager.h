@@ -28,7 +28,7 @@ public:
 	void drawText(std::string fontID, std::string msg);
 	void drawText(std::string fontID, int x, int y, std::string msg);
 
-	void closeFonts();
+	void clean();
 
 private:
 	FontManager() {}

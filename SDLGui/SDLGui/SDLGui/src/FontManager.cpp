@@ -66,7 +66,9 @@ void FontManager::drawText(std::string fontID, int x, int y, std::string msg)
 	SDL_DestroyTexture(texture);
 }
 
-void FontManager::closeFonts()
+void FontManager::clean()
 {
 	TTF_CloseFont(m_fontMap["anon"]);
+
+	m_fontMap.clear();
 }
