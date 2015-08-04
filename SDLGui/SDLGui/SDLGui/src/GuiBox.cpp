@@ -16,25 +16,24 @@ GuiBox::GuiBox(int x, int y, int width, int height, SDL_Color color)
 	m_horizontalTiles = (m_width / m_borderWidth);
 
 	//set bg rect
-	m_bgRect.x = x + m_borderWidth;
-	m_bgRect.y = y + m_borderWidth;
-	m_bgRect.w = width - m_borderWidth*2;
-	m_bgRect.h = height - m_borderWidth*2;
+	m_bgRect.x = x + m_borderWidth/2;
+	m_bgRect.y = y + m_borderWidth/2;
+	m_bgRect.w = width - m_borderWidth;
+	m_bgRect.h = height - m_borderWidth;
 
 	//load the texture to use
 	std::cout << "Loading Texture" << std::endl;
 	TexManager::Instance()->load("assets/images/redBorder.png", "redBorder", TheGame::Instance()->getRenderer());
+	TexManager::Instance()->load("assets/images/bgtest.png", "bgtest", TheGame::Instance()->getRenderer());
 }
 
 void GuiBox::draw()
 {
 
-	//draw background color
-	//SDL_Surface* s;
-	//s = SDL_CreateRGBSurface(0, m_bgRect.w, m_bgRect.h, 32, 0, 0, 0, 0);
-	//SDL_FillRect(s, &m_bgRect, SDL_MapRGB(s->format, m_boxColor.r, m_boxColor.g, m_boxColor.b));
-	SDL_SetRenderDrawColor(TheGame::Instance()->getRenderer(), m_boxColor.r, m_boxColor.g, m_boxColor.b, 50);
-	SDL_RenderFillRect(TheGame::Instance()->getRenderer(), &m_bgRect);
+	//draw background texture
+	
+	TexManager::Instance()->draw("bgtest", m_bgRect.x, m_bgRect.y, m_bgRect.w, m_bgRect.h, TheGame::Instance()->getRenderer());
+
 
 	//draw top left
 	TexManager::Instance()->drawFrame("redBorder", m_x, m_y, m_borderWidth, m_borderWidth, 0, 4, TheGame::Instance()->getRenderer(), 0, 255);
@@ -66,6 +65,5 @@ void GuiBox::draw()
 		TexManager::Instance()->drawFrame("redBorder", m_x, m_y + (m_borderWidth * i), m_borderWidth, m_borderWidth, 0, 1, TheGame::Instance()->getRenderer(), 0, 255);
 	}
 
-	//SDL_FreeSurface(s);
-	SDL_SetRenderDrawColor(TheGame::Instance()->getRenderer(), 0, 0, 0, 0);
+	
 }

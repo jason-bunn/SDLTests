@@ -82,7 +82,7 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 
 	//register sounds and objects
 	loadFonts();
-	badBox = new GuiBox(10, 10, 200, 200, { 255, 255,255 });
+	badBox = new GuiBox(10, 10, 500, 300, { 255, 255,255 });
 
 	m_bRunning = true;
 	return true;
