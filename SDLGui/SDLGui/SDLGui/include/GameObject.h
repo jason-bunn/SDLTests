@@ -39,6 +39,8 @@ public:
 	void setUpdating(bool updating) { m_bUpdating = updating; }
 
 	void setCollisionLayers(std::vector<TileLayer*>* layers) { m_pCollisionLayers = layers; }
+
+	std::string type() { return m_type; }
 protected:
 
 	GameObject() : m_position(0, 0),
@@ -84,6 +86,8 @@ protected:
 	int m_alpha;
 
 	std::vector<TileLayer*>* m_pCollisionLayers;
+
+	std::string m_type;
 };
 
 

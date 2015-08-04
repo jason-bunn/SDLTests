@@ -41,6 +41,9 @@ public:
 	int getGameWidth() { return m_Width; }
 	int getGameHeight() { return m_Height; }
 
+	void setPlayerLives(int lives) { m_playerLives = lives; }
+	int getPlayerLives() { return m_playerLives; }
+
 private:
 	Game();
 	~Game();
@@ -60,6 +63,7 @@ private:
 	int m_FrameCount;
 	Uint32 m_StartTime;
 
+	int m_playerLives;
 };
 
 typedef Game TheGame;
