@@ -46,6 +46,23 @@ void TextureManager::draw(std::string id, int x, int y, int width, int height, S
 
 }
 
+void TextureManager::drawAlpha(std::string id, int x, int y, int width, int height, SDL_Renderer* pRenderer, int alpha, SDL_RendererFlip flip)
+{
+	SDL_Rect srcRect;
+	SDL_Rect destRect;
+
+	srcRect.x = 0;
+	srcRect.y = 0;
+	srcRect.w = destRect.w = width;
+	srcRect.h = destRect.h = height;
+	destRect.x = x;
+	destRect.y = y;
+
+	SDL_SetTextureAlphaMod(m_textureMap[id], alpha);
+	SDL_RenderCopyEx(pRenderer, m_textureMap[id], &srcRect, &destRect, 0, 0, flip);
+
+}
+
 void TextureManager::drawFrame(std::string id, int x, int y, int width, int height, int currentRow, int currentFrame, SDL_Renderer* pRenderer, double angle, int alpha, SDL_RendererFlip flip)
 {
 	SDL_Rect srcRect; 
@@ -55,6 +72,39 @@ void TextureManager::drawFrame(std::string id, int x, int y, int width, int heig
 	srcRect.y = height * currentRow;
 	srcRect.w = destRect.w = width;
 	srcRect.h = destRect.h = height;
+	destRect.x = x;
+	destRect.y = y;
+
+	SDL_SetTextureAlphaMod(m_textureMap[id], alpha);
+	SDL_RenderCopyEx(pRenderer, m_textureMap[id], &srcRect, &destRect, angle, 0, flip);
+}
+
+void TextureManager::drawHRepeatedFrame(std::string id, int x, int y, int width, int height, int currentRow, int currentFrame, SDL_Renderer* pRenderer, double angle, int alpha, int destWidth, SDL_RendererFlip flip)
+{
+	SDL_Rect srcRect;
+	SDL_Rect destRect;
+
+	srcRect.x = width * currentFrame;
+	srcRect.y = height * currentRow;
+	srcRect.w = width;
+	destRect.w = destWidth;
+	srcRect.h = destRect.h = height;
+	destRect.x = x;
+	destRect.y = y;
+
+	SDL_SetTextureAlphaMod(m_textureMap[id], alpha);
+	SDL_RenderCopyEx(pRenderer, m_textureMap[id], &srcRect, &destRect, angle, 0, flip);
+}
+void TextureManager::drawVRepeatedFrame(std::string id, int x, int y, int width, int height, int currentRow, int currentFrame, SDL_Renderer* pRenderer, double angle, int alpha, int destHeight, SDL_RendererFlip flip)
+{
+	SDL_Rect srcRect;
+	SDL_Rect destRect;
+
+	srcRect.x = width * currentFrame;
+	srcRect.y = height * currentRow;
+	srcRect.w = destRect.w = width;
+	srcRect.h = height;
+	destRect.h = destHeight;
 	destRect.x = x;
 	destRect.y = y;
 
@@ -86,3 +136,4 @@ void TextureManager::clearFromTextureMap(std::string id)
 {
 	m_textureMap.erase(id);
 }
+

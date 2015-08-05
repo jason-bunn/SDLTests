@@ -2,6 +2,7 @@
 #include "SDL_timer.h"
 #include "FontManager.h"
 #include "GuiBox.h"
+#include "SplashState.h"
 #include <iostream>
 
 Game* Game::s_pInstance = 0;
@@ -82,8 +83,9 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 
 	//register sounds and objects
 	loadFonts();
-	badBox = new GuiBox(10, 10, 500, 300, { 255, 255,255 });
-
+	//badBox = new GuiBox(10, 10, 433, 311, { 255, 255,255 });
+	m_pGameStateMachine = new GameStateMachine();
+	m_pGameStateMachine->changeState(new SplashState());
 	m_bRunning = true;
 	return true;
 }
@@ -125,8 +127,8 @@ void Game::render()
 	SDL_RenderClear(m_pRenderer);
 	
 	//render all the things
-
-	badBox->draw();
+	m_pGameStateMachine->render();
+	//badBox->draw();
 	//display game stats
 	displayGameStats();
 	//display to renderer
@@ -135,7 +137,7 @@ void Game::render()
 
 void Game::update(float deltaTime)
 {
-
+	m_pGameStateMachine->update();
 }
 
 void Game::handleEvents()

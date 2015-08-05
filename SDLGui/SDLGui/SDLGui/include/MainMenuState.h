@@ -15,7 +15,7 @@ public:
 	virtual void render();
 
 	virtual bool onEnter();
-	virtual book onExit();
+	virtual bool onExit();
 
 	virtual std::string getStateID() const { return s_menuID; }
 

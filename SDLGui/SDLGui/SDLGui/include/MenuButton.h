@@ -41,7 +41,7 @@ class MenuButtonCreator : public BaseCreator
 {
 	GameObject* createGameObject() const
 	{
-		return new Menubutton();
+		return new MenuButton();
 	}
 };
 

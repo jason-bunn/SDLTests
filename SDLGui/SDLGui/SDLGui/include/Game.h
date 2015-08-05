@@ -3,6 +3,8 @@
 
 #include "SDL.h"
 #include "SDL_ttf.h"
+#include "GameStateMachine.h"
+#include "Vector2D.h"
 
 #include <string>
 #include <map>
@@ -33,6 +35,8 @@ public:
 
 	SDL_Renderer* getRenderer() const { return m_pRenderer; }
 	SDL_Window* getWindow() const { return m_pWindow; }
+	GameStateMachine* getStateMachine() { return m_pGameStateMachine; }
+
 
 	void displayGameStats();
 
@@ -50,6 +54,7 @@ private:
 
 	SDL_Window* m_pWindow;
 	SDL_Renderer* m_pRenderer;
+	GameStateMachine* m_pGameStateMachine;
 
 	bool m_bRunning;
 	bool m_bDisplayStats;
